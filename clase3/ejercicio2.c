@@ -19,6 +19,9 @@ int main() {
     printf("%d\n", b);
     *(*(arr + 1)) = 8;
     printf("%d\n", b);
+
+    printf("%p, %p, %p\n", arr[0], *(arr+1), arr[2]);
+    printf("%d, %d, %d\n", *arr[0], *(*(arr+1)), *arr[2]);
     
     return 0;
 }
