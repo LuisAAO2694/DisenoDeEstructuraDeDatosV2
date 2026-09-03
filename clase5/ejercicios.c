@@ -83,7 +83,7 @@ int main()
 
     for (int i = 0; i < 3; i++)
     {
-        if (isLinear(*(misfunciones)))
+        if (isLinear(*(misfunciones[i])))
         {
             printf("its linear \n");
         }
@@ -92,7 +92,7 @@ int main()
             printf("it isnt lienar \n");
         }
 
-        if (isQuadratic(*(misfunciones)))
+        if (isQuadratic(*(misfunciones + i)))
         {
             printf("its Quadratic \n");
         }
@@ -102,43 +102,18 @@ int main()
         }
     }
 
-    //Solo para mostrar los nombres <-Es de mi parte
-    // const char* nombres[3] = {"F1", "F2", "F3"};
-    // const char* expresiones[3] = {"4x - 2", "3x² - 2x + 4", "6√x + 2"};
+    //Sin usar alias
+    float (*fp) (float);
+    fp = F2;
 
-    // //b) Por cada elemento del arreglo, invocar isLinear e isQuadratic
-    // for(int a=0; a<3; a++)
-    // {
-    //     printf("--- %s: %s ---\n", nombres[a], expresiones[a]);
-        
-    //     // Mostramos valores para referencia
-    //     printf("  f(10000) = %.2f\n", misfunciones[a](10000));
-    //     printf("  f(20000) = %.2f\n", misfunciones[a](20000));
-    //     printf("  Ratio = %.4f\n", misfunciones[a](20000) / misfunciones[a](10000));
-        
-    //     //Evaluamos isLinear e isQuadratic
-    //     Bool esLineal = isLinear(misfunciones[a]);
-    //     Bool esCuadratica = isQuadratic(misfunciones[a]);
-        
-    //     if(esLineal && !esCuadratica)
-    //     {
-    //         printf("RESULTADO: Es lineal. No es cuadrático.\n");
-    //     }
-    //     else if(!esLineal && esCuadratica)
-    //     {
-    //         printf("RESULTADO: No es lineal. Es cuadrático.\n");
-    //     }
-    //     else if(!esLineal && !esCuadratica)
-    //     {
-    //         printf("RESULTADO: No es lineal. No es cuadrático.\n");
-    //     }
-    //     else
-    //     {
-    //         //Case teorico puede caer pero no va a pasar
-    //         printf("RESULTADO: Es lineal y es cuadrático (caso especial).\n");
-    //     }
-        
-    //     printf("\n");
-    // }
+    printf("f2 ");
+    if(isLinear(fp))
+    {
+        printf("is ");
+    } else {
+        printf("isnt");
+    }
+    printf("linear \n");
 
+    return 0;
 }
