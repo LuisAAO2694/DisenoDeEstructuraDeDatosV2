@@ -1,0 +1,29 @@
+1. Apuntadores
+
+Declare tres flotantes (myFloat1, myFloat2, myFloat3) y tres apuntadores a flotante (myFloatPointer1, myFloatPointer2, myFloatPointer3). Guarde las direcciones de los flotantes en los apuntadores. Asigne, a través de los apuntadores, los valores 2 y 3 a los primeros dos flotantes. Asigne, a través de los apuntadores, el resultado de la suma de los primeros dos flotantes al tercero.
+
+2. Aritmética de apuntadores
+
+Desarrolle una función incrementArray que reciba un arreglo de enteros y un entero N que indique su tamaño. La función deberá incrementar en 1 el valor de cada elemento del arreglo. No emplee notación de corchetes para resolver este problema (use aritmética de apuntadores para acceder a los elementos).
+
+3. Apuntadores a funciones
+
+Dada la siguiente función,
+
+	int add(int x, int y) {
+		return x + y;
+	}
+
+Cree un apuntador myFunctionPointer capaz de apuntar a una función como add y almacene en él la dirección de dicha función. Declare una variable de tipo entero mySum y asígnele el resultado de una llamada a la función con los parámetros 5 y 7. Llame a la función a través del apuntador myFunctionPointer, no directamente.
+
+4. Apuntadores a estructuras
+
+Defina una estructura Vec2D que tenga dos atributos de tipo float: i y j. Implemente una función printVec2D que reciba un apuntador a Vec2D e imprima el vector con el formato { i, j }. Cree un vector myVector, asígnele valores y llame a la función printVec2D para él.
+
+5. Pase por valor y por referencia
+
+Implemente una función powInPlace reciba dos argumentos: un apuntador a entero y un entero. El apuntador referirá un entero que desee elevarse a una potencia, y el entero la potencia a la que se desea que sea elevado. Declare un entero, asígnele un valor y llame a la función powInPlace para él, elevándolo a la potencia 5. 
+
+6. Arreglos de apuntadores
+
+Declare cuatro variables de tipo Vec2D y cuatro variables de tipo flotante. Asigne valores a las variables de tipo Vec2D. Cree dos arreglos de apuntadores para almacenar las direcciones de las variables Vec2D y float. Implemente una función que reciba un arreglo de apuntadores a Vec2D, un arreglo de apuntadores a float, y un entero N que indique el tamaño de los arreglos. La función deberá calcular la magnitud de cada vector y almacenarlo en la posición correspondiente en el arreglo de flotantes.
