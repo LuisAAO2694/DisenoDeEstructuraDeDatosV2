@@ -25,6 +25,9 @@ int  stack_top(Stack);
 //Consulta y remeueve el elemento en la parte supeiorr de la pila
 int  stack_pop(Stack);
 
+//Imprime todos los elementos de la pila, del tope hacia la base
+void  stack_print(Stack);
+
 //Libera la memeoria reservada oara todos los nodos
 //y aquella reservada para la estructura que representa a la pila
 void  stack_destroy(Stack);
