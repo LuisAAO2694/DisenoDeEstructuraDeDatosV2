@@ -2,115 +2,106 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+typedef void* Type;
 
-typedef void *Type;
-struct strNode
-{
-    Type data;
-    struct strNode *next;
+struct strNode {
+	Type data;
+	struct strNode* next;
 };
 
-typedef struct strNode *Node;
-struct strQueue
-{
-    // struct strNode *first, *last;
-    Node first, last;
-    int size;
+typedef struct strNode* Node;
+
+struct strQueue {
+	//struct strNode *first, *last;
+	Node first, last;
+	int size;
+	printFunc print;
 };
 
-Queue queue_create()
-{
-    Queue q = (Queue) malloc(sizeof(struct strQueue));
-    if (q == NULL) return NULL;
-
-    q->first = NULL;
-    q->last  = NULL;
-    q->size  = 0;
-
-    return q;
+Queue queue_create(printFunc p) {
+	//Crea una nueva cola
+	//1. Reserva espacio en memoria dinámica para una estructura queue
+	Queue q = malloc(sizeof(struct strQueue));
+	//2. Asigna valores a las propiedades de la estructura (first, last y size)
+	q->size = 0;
+	q->first = NULL;
+	q->last = NULL;
+	q->print = p;
+	//3. Devuelve el apuntador a queue al usuario
+	return q;
 }
 
-int queue_size(Queue q)           // Extrae el tamaño de la cola
-{
-    if (q == NULL) return 0;
-    return q->size;
+int queue_size(Queue q) {
+	//Extrae el tamaño de la cola
+	return q->size;
 }
 
-Bool queue_isEmpty(Queue q)       // ¿El primero es nulo?
-{
-    if (q == NULL) return True;
-    return (q->first == NULL) ? True : False;
+Bool queue_isEmpty(Queue q) {
+	//¿El primero es nulo?
+	return q->size == 0;
 }
 
-Type queue_peek(Queue q)         // Consulta quién está al frente (no elimina)
-{
-    if (q == NULL || q->first == NULL) return NULL;
-    return q->first->data;
+Type queue_peek (Queue q) {
+	//Consulta quién está al frente (no elimina)
+	if (queue_isEmpty(q)) {
+		return NULL;
+	} else {
+		return q->first->data;
+	}
 }
 
-void queue_offer(Queue q, Type d) // Se forma uno nuevo (colocarlo al final)
-{
-    if (q == NULL) return;
-
-    //First creo el new nodo
-    Node nuevo = (Node) malloc(sizeof(struct strNode));
-    if (nuevo == NULL) return;
-
-    nuevo->data = d;
-    nuevo->next = NULL;
-
-    //Despues tengo que referenciar la cola 
-    if (q->last == NULL) //Caso: cola vacia
-    {
-        q->first = nuevo;
-        q->last  = nuevo;
-    }
-    else //Caso: cola con elementos
-    {
-        q->last->next = nuevo;
-        q->last       = nuevo;
-    }
-
-    q->size++;
+void queue_offer(Queue q, Type d) {
+	//Se forma uno nuevo (colocarlo al final)
+	//1. Reserva espacio en memoria dinámica para una estructura node
+	//   y actualiza sus valores
+	Node n = malloc(sizeof(struct strNode));
+	n->data = d;
+	n->next = NULL;
+	//2. Revisa si la cola está vacía (si lo está, hay que actualizar tanto
+	//   first como last; si no, sólo last). Antes de modificar last,
+	//   hay que actualizar el next del anterior last.
+	if (queue_isEmpty(q)) {
+		q->first = n;
+	} else {
+		q->last->next = n;
+	}
+	q->last = n;
+	//3. Actualiza size
+	q->size ++;
 }
 
-Type queue_poll(Queue q)          // Atiende al que está al frente (elimina)
-{
-    if (q == NULL || q->first == NULL) return NULL;
-
-    //Guardo el nodo y el dato a devolver
-    Node nodeToPoll = q->first;
-    Type toReturn   = nodeToPoll->data;
-
-    //Avanzar first
-    q->first = nodeToPoll->next;
-
-    //Si la cola quedovacia, last entonces también debe ser NULL
-    if (q->first == NULL)
-        q->last = NULL;
-
-    //Liberar el nodo
-    free(nodeToPoll);
-
-    //Decrementar tamaño
-    q->size--;
-
-    return toReturn;
+Type queue_poll(Queue q) {
+	//Atiende al que está al frente (elimina)
+	if (queue_isEmpty(q)) {
+		return NULL;
+	} else {
+		Node aux = q->first;
+		Type toReturn = q->first->data;
+		q->first = q->first->next;
+		if (queue_size(q) == 1) {
+			q->last = NULL;
+		}
+		q->size --;
+		free(aux);
+		return toReturn;
+	}
 }
 
-void queue_destroy(Queue q)
-{
-    if (q == NULL) return;
+void queue_destroy(Queue q) {
+	while (!queue_isEmpty(q)) {
+		queue_poll(q);
+	}
+	free(q);
+	//Elimina a todos los nodos y a la cola misma
+}
 
-    //Reccorro y libero cada nodo
-    Node actual = q->first;
-    while (actual != NULL)
-    {
-        Node temp = actual;
-        actual = actual->next;
-        free(temp);
-    }
-
-    //Le hago free para borrar todo
-    free(q);
+void queue_print(Queue q) {
+	if (!queue_isEmpty(q)) {
+		Node current = q->first;
+		do {
+			q->print(current->data);
+			current = current->next;
+		} while (current != NULL);
+	}
+	printf("\n");
 }

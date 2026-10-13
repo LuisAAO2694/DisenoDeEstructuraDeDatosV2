@@ -1,36 +1,38 @@
 #include "Queue.h"
-#include <stdlib.h>
+#include "Vec3.h"
 #include <stdio.h>
 
-void imprimirCola(Queue q)
-{
-    printf("  size = %d | isEmpty = %s | peek = ",
-        queue_size(q),
-        queue_isEmpty(q) == True ? "True" : "False");
-
-    if (queue_isEmpty(q) == True)
-        printf("(cola vacia)\n");
-    else
-        printf("%d\n", *(int *)queue_peek(q));
+void printChar(void* data) {
+	printf("%c", *((char*) data));
 }
 
-int main()
-{
-    //Crear cola
-    printf("1) Creando cola...\n");
-    Queue q = queue_create();
-    imprimirCola(q);
-    printf("\n");
-
-    //Offer con varios datos
-    printf("2) Formando elementos \n");
-    int datos[5] = {10, 20, 30, 40, 50};
-    for (int i = 0; i < 5; i++)
-    {
-        queue_offer(q, &datos[i]);
-        printf("  offer(%d) -> ", datos[i]);
-        imprimirCola(q);
-    }
-    printf("\n");
-    return 0;
+void printVec3(void* data) {
+	Vec3 v = (Vec3) data;
+	printf("{ %.2f, %.2f, %.2f }", vec3_getX(v), vec3_getY(v), vec3_getZ(v));
 }
+
+int main() {
+
+	Queue myCharQueue = queue_create(printChar);
+	char myCharArr[] = "Estructuras de datos";
+	for (int i = 0; i < 20; i ++) {
+		queue_offer(myCharQueue, myCharArr + i);
+	}
+	queue_print(myCharQueue);
+	for (int i = 0; i < 20; i ++) {
+		printf("%c", *((char*) queue_poll(myCharQueue)));
+	}
+	printf("\n");
+
+	Queue myVec3Queue = queue_create(printVec3);
+	Vec3 v1 = vec3_create(1, 2, 3);
+	Vec3 v2 = vec3_create(2, 3, 4);
+	Vec3 v3 = vec3_create(3, 4, 5);
+	queue_offer(myVec3Queue, v1);
+	queue_offer(myVec3Queue, v2);
+	queue_offer(myVec3Queue, v3);
+	queue_print(myVec3Queue);
+
+	return 0;
+}
+
