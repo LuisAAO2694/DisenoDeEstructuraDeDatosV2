@@ -1,11 +1,11 @@
 #ifndef LIST_H_
 #define LIST_H_
 
-//Tipos genéricos
-typedef void *Type;
-typedef struct strList *List;
+typedef void* Type;
+typedef struct strList* List;
+typedef void (*freeFunc) (void*);
 
-List list_create();
+List list_create(freeFunc f);
 void list_destroy(List l);
 int list_size(List l);
 void list_add(List l, Type e);
