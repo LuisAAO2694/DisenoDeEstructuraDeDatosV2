@@ -6,7 +6,8 @@
 typedef void* Type;
 //El apuntador a la función comparadora
 typedef int (*CompareFunc)(Type, Type); 
-
+//El apuntador a la función que imprime un dato
+typedef void (*PrintFunc)(Type);
 //El Set es un apuntador a la estructura interna
 typedef struct strSet* Set; 
 
@@ -15,6 +16,7 @@ void set_destroy(Set s);
 int set_size(Set s);
 bool set_add(Set s, Type t);
 bool set_contains(Set s, Type t);
-void set_print(Set s);
+void set_print(Set s, PrintFunc printFunction);
+void set_printPre(Set s, PrintFunc printFunction);
 
 #endif

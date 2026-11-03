@@ -85,3 +85,45 @@ bool set_add(Set s, Type t) {
     
     return false;
 }
+
+// Imprime un nodo y sus descendientes en orden (in-order)
+static void printNode(Node n, void(*PrintFunction) (Type e))
+{
+    if (n == NULL)
+        return;
+
+    printNode(n->left, PrintFunction);       // izquierda
+    PrintFunction(n->data);                  // nodo
+    printNode(n->right, PrintFunction);      // derecha
+}
+
+void set_print(Set s, void(*PrintFunction) (Type e))
+{
+    if (s->size == 0)
+    {
+        return;
+    }
+
+    printNode(s->root, PrintFunction);
+}
+
+// Imprime un nodo y sus descendientes en pre-orden (nodo -> izquierda -> derecha)
+static void printNodePre(Node n, void(*PrintFunction) (Type e))
+{
+    if (n == NULL)
+        return;
+
+    PrintFunction(n->data);                  // nodo
+    printNodePre(n->left, PrintFunction);    // izquierda
+    printNodePre(n->right, PrintFunction);   // derecha
+}
+
+void set_printPre(Set s, void(*PrintFunction) (Type e))
+{
+    if (s->size == 0)
+    {
+        return;
+    }
+
+    printNodePre(s->root, PrintFunction);
+}
