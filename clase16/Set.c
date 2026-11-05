@@ -226,3 +226,61 @@ bool set_remove(Set s, Type e)
     //Entonces la raiz queda actualizada sola: si target era la raíz, L era &s->root, y ya se asignó *L = arriba segun yo
     return true;
 }
+
+void collectInOrder(Node n, Type *arr, int *i)
+{
+    if (n == NULL)
+        return;
+
+    collectInOrder(n->left, arr, i);
+    arr[(*i)++] = n->data;
+    collectInOrder(n->right, arr, i);
+}
+
+//Creo un nuevo conjunto con la intersección de a y b
+Set set_intersection(Set a, Set b)
+{
+    Set result = set_create(a->compareFunc);
+
+    //Si alguno está vacío, la intersección es vacía
+    if (a->size == 0 || b->size == 0)
+        return result;
+
+    //Obtener los elementos de cada conjunto en orden
+    Type *elemsA = malloc(sizeof(Type) * a->size);
+    Type *elemsB = malloc(sizeof(Type) * b->size);
+
+    int nA = 0, nB = 0;
+    collectInOrder(a->root, elemsA, &nA);
+    collectInOrder(b->root, elemsB, &nB);
+
+    //Recorrer ambos arreglos ordenados y agregar los que coinciden
+    int i = 0, j = 0;
+    while (i < nA && j < nB)
+    {
+        int cmp = a->compareFunc(elemsA[i], elemsB[j]);
+
+        if (cmp == 0)
+        {
+            //está en los dos
+            set_add(result, elemsA[i]);   
+            i++;
+            j++;
+        }
+        else if (cmp < 0)
+        {
+            //elemsA[i] es menor, avanzar A
+            i++;                          
+        }
+        else
+        {
+            //elemsB[j] es menor, avanzar B
+            j++;                         
+        }
+    }
+
+    free(elemsA);
+    free(elemsB);
+
+    return result;
+}

@@ -83,5 +83,47 @@ int main()
     printf("\n");
     printf("Tamaño final del conjunto: %d\n", set_size(myIntSet));
 
+    //Crear dos conuntos difrenretes y luego un tercer conjunto que sea la interseccion de los 2 primeros
+    //Sin consultarlos
+    printf("-------------------------------\n");
+    Set A = set_create(compareInt);
+    Set B = set_create(compareInt);
+
+    int datosA[] = {5, 2, 8, 1, 9, 4};
+    int datosB[] = {3, 8, 2, 10, 1, 7};
+
+    // Llenar A
+    for (int i = 0; i < 6; i++)
+    {
+        int *x = malloc(sizeof(int));
+        *x = datosA[i];
+        if (!set_add(A, x))
+            free(x);
+    }
+
+    // Llenar B
+    for (int i = 0; i < 6; i++)
+    {
+        int *x = malloc(sizeof(int));
+        *x = datosB[i];
+        if (!set_add(B, x))
+            free(x);
+    }
+
+    // Tercer conjunto = intersección
+    Set C = set_intersection(A, B);
+
+    printf("A:       ");
+    set_print(A, printInt);
+    printf("\nB:       ");
+    set_print(B, printInt);
+    printf("\nA ∩ B:   ");
+    set_print(C, printInt);
+    printf("\n");
+
+    set_destroy(C);
+    set_destroy(B);
+    set_destroy(A);
+
     return 0;
 }

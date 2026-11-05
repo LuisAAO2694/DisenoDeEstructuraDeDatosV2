@@ -20,4 +20,6 @@ void set_print(Set s, PrintFunc printFunction);
 void set_printPre(Set s, PrintFunc printFunction);
 bool set_remove(Set s, Type e);
 
+Set set_intersection(Set a, Set b);
+
 #endif
