@@ -18,5 +18,6 @@ bool set_add(Set s, Type t);
 bool set_contains(Set s, Type t);
 void set_print(Set s, PrintFunc printFunction);
 void set_printPre(Set s, PrintFunc printFunction);
+bool set_remove(Set s, Type e);
 
 #endif

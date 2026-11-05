@@ -127,3 +127,102 @@ void set_printPre(Set s, void(*PrintFunction) (Type e))
 
     printNodePre(s->root, PrintFunction);
 }
+void freeNode(Node n)
+{
+    if(n->left !=NULL) freeNode(n->left);
+    if(n->right !=NULL) freeNode(n->right);
+    free(n);
+}
+
+void set_destroy(Set s)
+{
+    if(s->root !=NULL) freeNode(s->root);
+    free(s);
+}
+
+bool set_remove(Set s, Type e)
+{
+    //Encontrar al elemento que pretendemos remover
+    //Si no lo encontramos, devolver falso. Si lo encontramos:
+    //Determinar la situación en la que se encuentra (sin hijos, con un hijo, o con dos hijos)
+    //a) Sin hijos: Liberar la memoria correspondiente al nodo y actualizar la referencia
+    //   del padre a nulo
+    //b) Con un hijo: Conectar al padre con el hijo y liberar la memoria correspondiente al nodo
+    //c) Con dos hijos: Encontrar al sucesor o al predecesor, sobreescribir con su dato al
+    //   del nodo que se va a eliminar, y eliminar al sucesor o predecesor según la situación
+    //   en la que se encuentre.
+    //Disminuir el tamaño del conjunto
+    //Si el elemento removido es la raíz, actualizar la propiedad correspondiente del conjunto
+    //Devolver verdadero
+
+    //L apunta a la referencia que apunta al nodo act
+    //btw al inicio es  &s->root despues &padre->left
+    Node *L = &s->root;
+
+    //Aqui ponemos un while para buscar el elemento 
+    while (*L != NULL)
+    {
+        int cmp = s->compareFunc(e, (*L)->data);
+        //encontrado
+        if (cmp == 0)
+            break;
+
+        //me voy por la izquierda
+        if (cmp < 0)
+        {
+            L = &(*L)->left;          
+        }
+        else
+        {
+            //me voy por la derecha
+            L = &(*L)->right; 
+        }
+    }
+
+    //Si no lo ecuentro, devolvemos falso
+    if (*L == NULL)
+        return false;
+
+    //nodo a eliminar
+    Node target = *L;                    
+
+    if (target->left == NULL)
+    {
+        //a) Sin hijo izquierdo (sin hijos o solo hijo derecho):
+        //el padre debe apuntar al hijo derecho o a NULL
+        *L = target->right;
+        free(target);
+    }
+    else if (target->right == NULL)
+    {
+        //b) Solo hijo izquierdo: el padre apunta al hijo izquierdo
+        *L = target->left;
+        free(target);
+    }
+    else
+    {
+        //c) Dos hijos: usar el sucesor (el menor del subarbol derecho)
+        Node *succLink = &target->right;
+        while ((*succLink)->left != NULL)
+        {
+            succLink = &(*succLink)->left;
+        }
+
+        //Sucesor
+        Node succ = *succLink; 
+
+        //sobreescribir el dato
+        target->data = succ->data;
+        
+        //el sucesor no tiene hijo izquierdo, puede tener derecho: lo conectamos
+        *succLink = succ->right;
+
+        //Libero el nodo del sucesor
+        free(succ);
+    }
+    //Disminuir el tamaño del conjunto
+    s->size--;
+
+    //Entonces la raiz queda actualizada sola: si target era la raíz, L era &s->root, y ya se asignó *L = arriba segun yo
+    return true;
+}
