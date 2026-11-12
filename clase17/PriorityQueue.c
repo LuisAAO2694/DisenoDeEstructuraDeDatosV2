@@ -86,3 +86,61 @@ void priorityqueue_destroy(PriorityQueue pq)
     free(pq->data); // Liberamos el arreglo
     free(pq);       // Liberamos la estructura principal
 }
+
+Type priorityQueue_poll(PriorityQueue pq) 
+{
+    //Si la cola está vacía, no hay nada que sacar
+    if (pq == NULL || pq->size == 0) {
+        return NULL;
+    }
+
+    //Respaldar al elemento que se encuentra en la "raíz"
+    Type rootElement = pq->data[0];
+
+    //Tomar al último elemento y sobreescribir con él al primero.
+    //Ojo: Solo lo movemos si la cola tiene más de 1 elemento.
+    if (pq->size > 1) {
+        pq->data[0] = pq->data[pq->size - 1];
+    }
+    
+    //Reducir size en 1 (porque ya sacamos el elemento)
+    pq->size--;
+
+    //Comparar el elemento que quedó en la "raíz" con sus hijos y hacer Bubble-Down
+    int i = 0; //Índice actual, empezamos en la raíz
+    
+    //El ciclo se detiene cuando:
+    //a) El elemento es más prioritario que sus hijos
+    //b) Dicho elemento es una hoja (no tiene hijos)
+    while (true) {
+        int left = leftChild(i);
+        int right = rightChild(i);
+        int smallest = i; //Asumimos que el padre es el más pequeño por ahora
+
+        //Verificamos si el hijo izquierdo existe Y es menor que el actual más pequeño
+        if (left < pq->size && pq->compare(pq->data[left], pq->data[smallest]) < 0) {
+            smallest = left;
+        }
+
+        //Verificamos si el hijo derecho existe Y es menor que el actual más pequeño
+        if (right < pq->size && pq->compare(pq->data[right], pq->data[smallest]) < 0) {
+            smallest = right;
+        }
+
+        //Si el más pequeño sigue siendo el padre, significa que ya está en su lugar.
+        //Esto cumple la condición de parada (a) y (b).
+        if (smallest == i) {
+            break;
+        }
+
+        //Si llegamos aquí, uno de los hijos era menor. Hacemos el swap
+        //con el hijo más prioritario (el más pequeño).
+        swap(&pq->data[i], &pq->data[smallest]);
+        
+        //Nos movemos hacia abajo para seguir revisando
+        i = smallest;
+    }
+
+    //Devolver al elemento que respaldamos en el primer paso
+    return rootElement;
+}
