@@ -13,7 +13,7 @@ typedef int (*HashFunc)(Type);
 typedef int (*CompareFunc)(Type, Type);
 typedef struct strMap *Map;
 
-map_create(int M, HashFunc hash, CompareFunc compare);
+Map map_create(int M, HashFunc hash, CompareFunc compare);
 int map_size(Map m);
 Bool map_put(Map m, Type key, Type value);
 Bool map_contains(Map m, Type key);
